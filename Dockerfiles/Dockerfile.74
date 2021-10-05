@@ -1,0 +1,50 @@
+FROM centos:latest
+LABEL maintainer="xrsec"
+LABEL mail="troy@zygd.site"
+
+RUN mkdir /www /www/server /www/bak /www/server/php74 \
+    && yum update -y \
+    && yum install -y nodejs wget zsh vim make cmake gcc gcc-c++ libxml2 libxml2-devel git \
+    zip unzip sqlite-devel m4 autoconf tree ncurses \
+    krb5-devel openssl openssl-devel curl curl-devel libjpeg \
+    libjpeg-devel libpng libpng-devel freetype freetype-devel \
+    pcre pcre-devel libxslt libxslt-devel bzip2 bzip2-devel \
+    openssh-server iputils net-tools oniguruma sudo go nss -y \
+    && yum upgrade \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN wget -O /www/bak/php74.tar.gz https://www.php.net/distributions/php-7.4.16.tar.gz --no-cookie --no-check-certificate \
+    && wget -O /www/bak/xdebug-3.0.2.tar https://pecl.php.net/get/xdebug-3.0.2.tar --no-cookie --no-check-certificate \
+    && tar -xzvf /www/bak/php74.tar.gz -C /www/bak
+
+RUN cd /www/bak/php-7.4.16 \
+    && ./configure --prefix=/www/server/php74 --with-curl \
+    --with-gettext --with-iconv-dir --with-kerberos --with-libdir=lib64 \
+    --with-mysqli --with-openssl --with-pdo-mysql --with-pdo-sqlite --with-pear \
+    --with-xmlrpc --with-xsl --with-zlib --with-bz2 --with-mhash \
+    --enable-fpm --enable-bcmath --enable-inline-optimization \
+    --enable-mbregex --enable-mbstring --enable-opcache --enable-pcntl --enable-shmop --enable-soap \
+    --enable-sockets --enable-sysvsem --enable-sysvshm --enable-xml \
+    && make && make install \
+    && /www/bak/php-7.4.16/build/shtool install -c ext/phar/phar.phar /www/server/php74/bin/phar.phar \
+    && ln -s -f phar.phar /www/server/php74/bin/phar \
+    && /www/server/php74/bin/pecl install /www/bak/xdebug-3.0.2.tar
+
+RUN cp /www/bak/php-7.4.16/php.ini-development /www/server/php74/lib/php.ini \
+    && echo "zend_extension=/www/server/php74/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so" >> /www/server/php74/lib/php.ini \
+    && echo "xdebug.mode = debug" >>/www/server/php74/lib/php.ini \
+    && echo "debug.remote_handler = dbgp" >>/www/server/php74/lib/php.ini \
+    && echo "xdebug.client_host = docker.for.mac.localhost" >>/www/server/php74/lib/php.ini \
+    && echo "xdebug.start_with_request = yes" >>/www/server/php74/lib/php.ini \
+    && echo "xdebug.client_port = 9003" >>/www/server/php74/lib/php.ini \
+    && echo "xdebug.idekey = \"PHPSTORM\"" >>/www/server/php74/lib/php.ini \
+    && cp /www/server/php74/etc/php-fpm.conf.default /www/server/php74/etc/php-fpm.conf \
+    && cp /www/server/php74/etc/php-fpm.d/www.conf.default /www/server/php74/etc/php-fpm.d/www.conf
+
+# ENV TZ='Asia/Shanghai'
+# ENV LANG 'zh_CN.UTF-8'
+# PHP_Run_Home : /www/server/php74/
+
+STOPSIGNAL SIGQUIT
+
+CMD ["/vscode.sh"]
