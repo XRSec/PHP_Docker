@@ -26,7 +26,8 @@ RUN cd /www/bak/php-5.6.40 \
     --enable-mbregex --enable-mbstring --enable-opcache --enable-pcntl --enable-shmop --enable-soap \
     --enable-sockets --enable-sysvsem --enable-sysvshm --enable-xml
 
-RUN make && make install \
+RUN cd /www/bak/php-5.6.40 \
+    && make && make install \
     && /www/bak/php-5.6.40/build/shtool install -c ext/phar/phar.phar /www/server/php56/bin \
     && ln -s -f phar.phar /www/server/php56/bin/phar \
     && /www/server/php56/bin/pecl install /www/bak/xdebug-2.5.5.tar
