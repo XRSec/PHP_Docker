@@ -17,7 +17,7 @@ RUN ln -sf /www/server/php74/bin/php /usr/bin/php74 \
     && ln -sf /www/server/php56/bin/pecl /usr/bin/php56-pecl \
     && ln -sf /www/server/php56/bin/pear /usr/bin/php56-pear
 
-ENTRYPOINT ["/bin/bash"]
+# ENTRYPOINT ["/bin/bash"]
 
 EXPOSE 9003
 
