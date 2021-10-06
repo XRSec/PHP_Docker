@@ -1,90 +1,18 @@
-FROM centos:latest
+FROM xrsec/php:5.6
 LABEL maintainer="xrsec"
 LABEL mail="troy@zygd.site"
 
-RUN mkdir /www /www/server /www/bak /www/server/php74 /www/server/php56 \
-    && yum update -y \
-    && yum install -y nodejs wget zsh vim make cmake gcc gcc-c++ libxml2 libxml2-devel git \
-    zip unzip sqlite-devel m4 autoconf nginx tree ncurses \
-    krb5-devel openssl openssl-devel curl curl-devel libjpeg \
-    libjpeg-devel libpng libpng-devel freetype freetype-devel \
-    pcre pcre-devel libxslt libxslt-devel bzip2 bzip2-devel \
-    openssh-server iputils net-tools oniguruma sudo go nss -y \
-    && yum upgrade \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN mkdir /www /www/server /www/bak /www/server/php74 /www/server/php56
+COPY --from=xrsec/php:5.6 /www/server/php74 /www/server/php74
 
-RUN wget -O /www/bak/php74.tar.gz https://www.php.net/distributions/php-7.4.16.tar.gz --no-cookie --no-check-certificate \
-    && wget -O /www/bak/php56.tar.gz https://www.php.net/distributions/php-5.6.40.tar.gz --no-cookie --no-check-certificate \
-    && wget -O /www/bak/oniguruma.tar.gz https://github.com/kkos/oniguruma/releases/download/v6.9.7.1/onig-6.9.7.1.tar.gz --no-cookie --no-check-certificate \
-    && wget -O /www/bak/xdebug-2.5.5.tar https://pecl.php.net/get/xdebug-2.5.5.tgz --no-cookie --no-check-certificate \
-    && wget -O /www/bak/xdebug-3.0.2.tar https://pecl.php.net/get/xdebug-3.0.2.tar --no-cookie --no-check-certificate \
-    && tar -xzvf /www/bak/php74.tar.gz -C /www/bak \
-    && tar -xzvf /www/bak/php56.tar.gz -C /www/bak \
-    && tar -zxvf /www/bak/oniguruma.tar.gz -C /www/bak
-
-RUN cd /www/bak/onig-6.9.7 \
-    && ./configure --prefix=/usr \
-    && make && make install
-
-RUN cd /www/bak/php-7.4.16 \
-    && ./configure --prefix=/www/server/php74 --with-curl \
-    --with-gettext --with-iconv-dir --with-kerberos --with-libdir=lib64 \
-    --with-mysqli --with-openssl --with-pdo-mysql --with-pdo-sqlite --with-pear \
-    --with-xmlrpc --with-xsl --with-zlib --with-bz2 --with-mhash \
-    --enable-fpm --enable-bcmath --enable-inline-optimization \
-    --enable-mbregex --enable-mbstring --enable-opcache --enable-pcntl --enable-shmop --enable-soap \
-    --enable-sockets --enable-sysvsem --enable-sysvshm --enable-xml \
-    && make && make install \
-    && /www/bak/php-7.4.16/build/shtool install -c ext/phar/phar.phar /www/server/php74/bin/phar.phar \
-    && ln -s -f phar.phar /www/server/php74/bin/phar \
-    && /www/server/php74/bin/pecl install /www/bak/xdebug-3.0.2.tar
-
-RUN cp /www/bak/php-7.4.16/php.ini-development /www/server/php74/lib/php.ini \
-    && echo "zend_extension=/www/server/php74/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so" >> /www/server/php74/lib/php.ini \
-    && echo "xdebug.mode = debug" >> /www/server/php74/lib/php.ini \
-    && echo "debug.remote_handler = dbgp" >> /www/server/php74/lib/php.ini \
-    && echo "xdebug.client_host = docker.for.mac.localhost" >> /www/server/php74/lib/php.ini \
-    && echo "xdebug.start_with_request = yes" >> /www/server/php74/lib/php.ini \
-    && echo "xdebug.client_port = 9003" >> /www/server/php74/lib/php.ini \
-    && echo 'xdebug.idekey = "PHPSTORM"' >> /www/server/php74/lib/php.ini \
-    && ln -s /www/server/php74/bin/php /usr/bin/php74 \
+RUN ln -s /www/server/php74/bin/php /usr/bin/php74 \
     && ln -s /www/server/php74/sbin/php-fpm /usr/bin/php74-fpm \
     && ln -s /www/server/php74/bin/pecl /usr/bin/php74-pecl \
     && ln -s /www/server/php74/bin/pear /usr/bin/php74-pear \
-    && cp /www/server/php74/etc/php-fpm.conf.default /www/server/php74/etc/php-fpm.conf \
-    && cp /www/server/php74/etc/php-fpm.d/www.conf.default /www/server/php74/etc/php-fpm.d/www.conf \
-    && sed -i "s/group = nobody/group = nginx/g" /www/server/php74/etc/php-fpm.d/www.conf \
-    && sed -i "s/user = nobody/user = nginx/g" /www/server/php74/etc/php-fpm.d/www.conf
-
-RUN cd /www/bak/php-5.6.40 \
-    && ./configure --prefix=/www/server/php56 --with-curl \
-    --with-gettext --with-iconv-dir --with-kerberos --with-libdir=lib64 \
-    --with-mysqli --with-pdo-mysql --with-pdo-sqlite --with-pear \
-    --with-xmlrpc --with-xsl --with-zlib --with-bz2 --with-mhash \
-    --enable-fpm --enable-bcmath --enable-inline-optimization \
-    --enable-mbregex --enable-mbstring --enable-opcache --enable-pcntl --enable-shmop --enable-soap \
-    --enable-sockets --enable-sysvsem --enable-sysvshm --enable-xml \
-    && make && make install \
-    && /www/bak/php-5.6.40/build/shtool install -c ext/phar/phar.phar /www/server/php56/bin \
-    && ln -s -f phar.phar /www/server/php56/bin/phar \
-    && /www/server/php56/bin/pecl install /www/bak/xdebug-2.5.5.tar
-
-RUN cp /www/bak/php-5.6.40/php.ini-development /www/server/php56/lib/php.ini \
-    && echo "zend_extension=/www/server/php56/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so" >> /www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_enable = on" >> /www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_host = docker.for.mac.localhost" >>/www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_port = 9003" >> /www/server/php56/lib/php.ini \
-    && echo 'xdebug.idekey="PHPSTORM"' >> /www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_autostart = 1" >> /www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_connect_back = 1" >> /www/server/php56/lib/php.ini \
-    && echo 'xdebug.remote_handler = "dbgp"' >> /www/server/php56/lib/php.ini \
     && ln -s /www/server/php56/sbin/php-fpm /usr/bin/php56-fpm \
     && ln -s /www/server/php56/bin/php /usr/bin/php56 \
     && ln -s /www/server/php56/bin/pecl /usr/bin/php56-pecl \
-    && ln -s /www/server/php56/bin/pear /usr/bin/php56-pear \
-    && cp /www/server/php56/etc/php-fpm.conf.default /www/server/php56/etc/php-fpm.conf \
-    && sed -i "s/group = nobody/group = nginx/g" /www/server/php56/etc/php-fpm.conf \
-    && sed -i "s/user = nobody/user = nginx/g" /www/server/php56/etc/php-fpm.conf
+    && ln -s /www/server/php56/bin/pear /usr/bin/php56-pear
 
 ENTRYPOINT ["/bin/bash"]
 
