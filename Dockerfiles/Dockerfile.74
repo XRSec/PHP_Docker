@@ -40,12 +40,12 @@ RUN cd /www/bak/php-7.4.16 \
 
 RUN cp /www/bak/php-7.4.16/php.ini-development /www/server/php74/lib/php.ini \
     && echo "zend_extension=/www/server/php74/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so" >> /www/server/php74/lib/php.ini \
-    && echo "xdebug.mode = debug" >>/www/server/php74/lib/php.ini \
-    && echo "debug.remote_handler = dbgp" >>/www/server/php74/lib/php.ini \
-    && echo "xdebug.client_host = docker.for.mac.localhost" >>/www/server/php74/lib/php.ini \
-    && echo "xdebug.start_with_request = yes" >>/www/server/php74/lib/php.ini \
-    && echo "xdebug.client_port = 9003" >>/www/server/php74/lib/php.ini \
-    && echo 'xdebug.idekey = "PHPSTORM"' >>/www/server/php74/lib/php.ini \
+    && echo "xdebug.mode = debug" >> /www/server/php74/lib/php.ini \
+    && echo "debug.remote_handler = dbgp" >> /www/server/php74/lib/php.ini \
+    && echo "xdebug.client_host = docker.for.mac.localhost" >> /www/server/php74/lib/php.ini \
+    && echo "xdebug.start_with_request = yes" >> /www/server/php74/lib/php.ini \
+    && echo "xdebug.client_port = 9003" >> /www/server/php74/lib/php.ini \
+    && echo 'xdebug.idekey = "PHPSTORM"' >> /www/server/php74/lib/php.ini \
     && cp /www/server/php74/etc/php-fpm.conf.default /www/server/php74/etc/php-fpm.conf \
     && cp /www/server/php74/etc/php-fpm.d/www.conf.default /www/server/php74/etc/php-fpm.d/www.conf \
     && ln -s /www/server/php74/bin/php /usr/bin/php74 \
