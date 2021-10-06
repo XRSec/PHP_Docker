@@ -40,14 +40,22 @@ RUN cd /www/bak/php-5.6.40 \
 
 RUN cp /www/bak/php-5.6.40/php.ini-development /www/server/php56/lib/php.ini \
     && echo "zend_extension=/www/server/php56/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so" >> /www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_enable = on" >>/www/server/php56/lib/php.ini \
+    && echo "xdebug.remote_enable = on" >> /www/server/php56/lib/php.ini \
     && echo "xdebug.remote_host = docker.for.mac.localhost" >>/www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_port = 9003" >>/www/server/php56/lib/php.ini \
-    && echo 'xdebug.idekey="PHPSTORM"' >>/www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_autostart = 1" >>/www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_connect_back = 1" >>/www/server/php56/lib/php.ini \
-    && echo "xdebug.remote_handler = \"dbgp\"" >>/www/server/php56/lib/php.ini \
-    && cp /www/server/php56/etc/php-fpm.conf.default /www/server/php56/etc/php-fpm.conf
+    && echo "xdebug.remote_port = 9003" >> /www/server/php56/lib/php.ini \
+    && echo 'xdebug.idekey="PHPSTORM"' >> /www/server/php56/lib/php.ini \
+    && echo "xdebug.remote_autostart = 1" >> /www/server/php56/lib/php.ini \
+    && echo "xdebug.remote_connect_back = 1" >> /www/server/php56/lib/php.ini \
+    && echo 'xdebug.remote_handler = "dbgp"' >> /www/server/php56/lib/php.ini \
+    && cp /www/server/php56/etc/php-fpm.conf.default /www/server/php56/etc/php-fpm.conf \
+    && ln -s /www/server/php56/sbin/php-fpm /usr/bin/php56-fpm \
+    && ln -s /www/server/php56/bin/php /usr/bin/php56 \
+    && ln -s /www/server/php56/bin/pecl /usr/bin/php56-pecl \
+    && ln -s /www/server/php56/bin/pear /usr/bin/php56-pear
+
+ENTRYPOINT ["/bin/bash"]
+
+EXPOSE 9003
 
 # ENV TZ='Asia/Shanghai'
 # ENV LANG 'zh_CN.UTF-8'

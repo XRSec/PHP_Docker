@@ -45,9 +45,17 @@ RUN cp /www/bak/php-7.4.16/php.ini-development /www/server/php74/lib/php.ini \
     && echo "xdebug.client_host = docker.for.mac.localhost" >>/www/server/php74/lib/php.ini \
     && echo "xdebug.start_with_request = yes" >>/www/server/php74/lib/php.ini \
     && echo "xdebug.client_port = 9003" >>/www/server/php74/lib/php.ini \
-    && echo "xdebug.idekey = \"PHPSTORM\"" >>/www/server/php74/lib/php.ini \
+    && echo 'xdebug.idekey = "PHPSTORM"' >>/www/server/php74/lib/php.ini \
     && cp /www/server/php74/etc/php-fpm.conf.default /www/server/php74/etc/php-fpm.conf \
-    && cp /www/server/php74/etc/php-fpm.d/www.conf.default /www/server/php74/etc/php-fpm.d/www.conf
+    && cp /www/server/php74/etc/php-fpm.d/www.conf.default /www/server/php74/etc/php-fpm.d/www.conf \
+    && ln -s /www/server/php74/bin/php /usr/bin/php74 \
+    && ln -s /www/server/php74/sbin/php-fpm /usr/bin/php74-fpm \
+    && ln -s /www/server/php74/bin/pecl /usr/bin/php74-pecl \
+    && ln -s /www/server/php74/bin/pear /usr/bin/php74-pear
+
+ENTRYPOINT ["/bin/bash"]
+
+EXPOSE 9003
 
 # ENV TZ='Asia/Shanghai'
 # ENV LANG 'zh_CN.UTF-8'
