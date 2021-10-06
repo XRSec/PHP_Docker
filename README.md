@@ -1,6 +1,8 @@
 # [PHP-FPM_Docker](https://blog.zygd.site/PHP%20FPM%20Docker.html)
 
-[![Docker Automated Build](https://img.shields.io/docker/automated/xrsec/php?label=Build&logo=docker&style=flat-square)](https://hub.docker.com/r/xrsec/php) [![Docker PHP Build](https://github.com/XRSec/PHP_Docker/actions/workflows/Docker_PHP_Build.yml/badge.svg)](https://github.com/XRSec/PHP_Docker/actions/workflows/Docker_PHP_Build.yml)
+![version](https://img.shields.io/badge/Version-PHP%207.4-da282a)  ![version](https://img.shields.io/badge/Version-PHP%205.6-da282a)  [![Docker Automated Build](https://img.shields.io/docker/automated/xrsec/php?label=Build&logo=docker&style=flat-square)](https://hub.docker.com/r/xrsec/php) [![Docker PHP Build](https://github.com/XRSec/PHP_Docker/actions/workflows/Docker_PHP_Build.yml/badge.svg)](https://github.com/XRSec/PHP_Docker/actions/workflows/Docker_PHP_Build.yml)
+
+> Please compile manually, github action may time out
 
 ## Basic information
 
