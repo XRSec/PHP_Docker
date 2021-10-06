@@ -4,7 +4,44 @@
 
 > Please compile manually, github action may time out
 
-## Basic information
+## USE
+
+```dockerfile
+FROM xrsec/php:latest | FROM xrsec/php:5.6 | FROM xrsec/php:7.4 | FROM xrsec/php:init
+LABEL From="xrsec"
+ARG TARGETPLATFORM
+```
+
+```dockerfile
+RUN mkdir -p /www /www/server /www/bak /www/server/php74 /www/server/php56
+COPY --from=xrsec/php:7.4 /www/server/php74 /www/server/php74
+COPY --from=xrsec/php:5.6 /www/server/php56 /www/server/php56
+```
+
+```dockerfile
+RUN ln -sf /www/server/php74/bin/php /www/env/php74 \
+    && ln -sf /www/server/php74/sbin/php-fpm /www/env/php74-fpm \
+    && ln -sf /www/server/php74/bin/pecl /www/env/php74-pecl \
+    && ln -sf /www/server/php74/bin/pear /www/env/php74-pear \
+    && rm -rf /usr/bin/php74 \
+    && rm -rf /usr/bin/php74-fpm \
+    && rm -rf /usr/bin/php74-pecl \
+    && rm -rf /usr/bin/php74-pear
+
+# PHP56 configuration files
+RUN ln -sf /www/server/php56/sbin/php-fpm /www/env/php56-fpm \
+    && ln -sf /www/server/php56/bin/php /www/env/php56 \
+    && ln -sf /www/server/php56/bin/pecl /www/env/php56-pecl \
+    && ln -sf /www/server/php56/bin/pear /www/env/php56-pear \
+    && rm -rf /usr/bin/php56-fpm \
+    && rm -rf /usr/bin/php56 \
+    && rm -rf /usr/bin/php56-pecl \
+    && rm -rf /usr/bin/php56-pear
+```
+
+## Configuration 
+
+### Basic information
 
 Optional version：`PHP 5.6.40 & FPM`  `PHP 7.4.16 & FPM`  `PHP 5.6.40 & PHP 7.4.16 & FPM`
 
@@ -19,7 +56,7 @@ Optional version：`PHP 5.6.40 & FPM`  `PHP 7.4.16 & FPM`  `PHP 5.6.40 & PHP 7.4
  user = nginx
 ```
 
-## Xdebug 2.5.5
+### Xdebug 2.5.5
 
 ```ini
 zend_extension=/www/server/php56/lib/php/extensions/no-debug-non-zts-20131226/xdebug.so
@@ -32,7 +69,7 @@ xdebug.remote_connect_back = 1
 xdebug.remote_handler = "dbgp"
 ```
 
-## Xdebug 3.0.0
+### Xdebug 3.0.0
 
 ```ini
 zend_extension=/www/server/php74/lib/php/extensions/no-debug-non-zts-20190902/xdebug.so
