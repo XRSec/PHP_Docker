@@ -2,8 +2,7 @@ FROM xrsec/php:init
 LABEL maintainer="xrsec"
 LABEL mail="troy@zygd.site"
 
-RUN mkdir -p /www /www/server /www/bak /www/server/php74 \
-
+RUN mkdir -p /www /www/server /www/bak /www/server/php74
 
 RUN wget -O /www/bak/php74.tar.gz https://www.php.net/distributions/php-7.4.16.tar.gz --no-cookie --no-check-certificate \
     && wget -O /www/bak/xdebug-3.0.2.tar https://pecl.php.net/get/xdebug-3.0.2.tar --no-cookie --no-check-certificate \
