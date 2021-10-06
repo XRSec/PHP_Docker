@@ -3,7 +3,8 @@ LABEL maintainer="xrsec"
 LABEL mail="troy@zygd.site"
 
 RUN mkdir /www /www/server /www/bak /www/server/php74 /www/server/php56
-COPY --from=xrsec/php:5.6 /www/server/php74 /www/server/php74
+COPY --from=xrsec/php:7.4 /www/server/php74 /www/server/php74
+COPY --from=xrsec/php:5.6 /www/server/php56 /www/server/php56
 
 RUN ln -s /www/server/php74/bin/php /usr/bin/php74 \
     && ln -s /www/server/php74/sbin/php-fpm /usr/bin/php74-fpm \
