@@ -1,27 +1,13 @@
-FROM centos:latest
+FROM xrsec/php:init
 LABEL maintainer="xrsec"
 LABEL mail="troy@zygd.site"
 
-RUN mkdir /www /www/server /www/bak /www/server/php74 \
-    && yum update -y \
-    && yum install -y nodejs wget zsh vim make cmake gcc gcc-c++ libxml2 libxml2-devel git \
-    zip unzip sqlite-devel m4 autoconf tree ncurses \
-    krb5-devel openssl openssl-devel curl curl-devel libjpeg \
-    libjpeg-devel libpng libpng-devel freetype freetype-devel \
-    pcre pcre-devel libxslt libxslt-devel bzip2 bzip2-devel \
-    openssh-server iputils net-tools oniguruma sudo go nss -y \
-    && yum upgrade \
-    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN mkdir -p /www /www/server /www/bak /www/server/php74 \
+
 
 RUN wget -O /www/bak/php74.tar.gz https://www.php.net/distributions/php-7.4.16.tar.gz --no-cookie --no-check-certificate \
     && wget -O /www/bak/xdebug-3.0.2.tar https://pecl.php.net/get/xdebug-3.0.2.tar --no-cookie --no-check-certificate \
-    && wget -O /www/bak/oniguruma.tar.gz https://github.com/kkos/oniguruma/releases/download/v6.9.7.1/onig-6.9.7.1.tar.gz --no-cookie --no-check-certificate \
-    && tar -zxvf /www/bak/oniguruma.tar.gz -C /www/bak \
     && tar -xzvf /www/bak/php74.tar.gz -C /www/bak
-
-RUN cd /www/bak/onig-6.9.7 \
-    && ./configure --prefix=/usr \
-    && make && make install
 
 RUN cd /www/bak/php-7.4.16 \
     && ./configure --prefix=/www/server/php74 --with-curl \
@@ -35,7 +21,7 @@ RUN cd /www/bak/php-7.4.16 \
 RUN cd /www/bak/php-7.4.16 \
     && make && make install \
     && /www/bak/php-7.4.16/build/shtool install -c ext/phar/phar.phar /www/server/php74/bin/phar.phar \
-    && ln -s -f phar.phar /www/server/php74/bin/phar \
+    && ln -sf phar.phar /www/server/php74/bin/phar \
     && /www/server/php74/bin/pecl install /www/bak/xdebug-3.0.2.tar
 
 RUN cp /www/bak/php-7.4.16/php.ini-development /www/server/php74/lib/php.ini \
@@ -48,10 +34,10 @@ RUN cp /www/bak/php-7.4.16/php.ini-development /www/server/php74/lib/php.ini \
     && echo 'xdebug.idekey = "PHPSTORM"' >> /www/server/php74/lib/php.ini \
     && cp /www/server/php74/etc/php-fpm.conf.default /www/server/php74/etc/php-fpm.conf \
     && cp /www/server/php74/etc/php-fpm.d/www.conf.default /www/server/php74/etc/php-fpm.d/www.conf \
-    && ln -s /www/server/php74/bin/php /usr/bin/php74 \
-    && ln -s /www/server/php74/sbin/php-fpm /usr/bin/php74-fpm \
-    && ln -s /www/server/php74/bin/pecl /usr/bin/php74-pecl \
-    && ln -s /www/server/php74/bin/pear /usr/bin/php74-pear
+    && ln -sf /www/server/php74/bin/php /usr/bin/php74 \
+    && ln -sf /www/server/php74/sbin/php-fpm /usr/bin/php74-fpm \
+    && ln -sf /www/server/php74/bin/pecl /usr/bin/php74-pecl \
+    && ln -sf /www/server/php74/bin/pear /usr/bin/php74-pear
 
 ENTRYPOINT ["/bin/bash"]
 
