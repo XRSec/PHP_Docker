@@ -15,7 +15,13 @@ RUN mkdir /www /www/server /www/bak /www/server/php74 \
 
 RUN wget -O /www/bak/php74.tar.gz https://www.php.net/distributions/php-7.4.16.tar.gz --no-cookie --no-check-certificate \
     && wget -O /www/bak/xdebug-3.0.2.tar https://pecl.php.net/get/xdebug-3.0.2.tar --no-cookie --no-check-certificate \
+    && wget -O /www/bak/oniguruma.tar.gz https://github.com/kkos/oniguruma/releases/download/v6.9.7.1/onig-6.9.7.1.tar.gz --no-cookie --no-check-certificate \
+    && tar -zxvf /www/bak/oniguruma.tar.gz -C /www/bak \
     && tar -xzvf /www/bak/php74.tar.gz -C /www/bak
+
+RUN cd /www/bak/onig-6.9.7 \
+    && ./configure --prefix=/usr \
+    && make && make install
 
 RUN cd /www/bak/php-7.4.16 \
     && ./configure --prefix=/www/server/php74 --with-curl \
@@ -49,4 +55,4 @@ RUN cp /www/bak/php-7.4.16/php.ini-development /www/server/php74/lib/php.ini \
 
 STOPSIGNAL SIGQUIT
 
-CMD ["/vscode.sh"]
+CMD ["/bin/bash"]
