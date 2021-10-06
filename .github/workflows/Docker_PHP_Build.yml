@@ -96,6 +96,6 @@ jobs:
           file: Dockerfiles/Dockerfile.56_74
           push: true
           tags: |
-            xrsec/php:7.4
+            xrsec/php:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
