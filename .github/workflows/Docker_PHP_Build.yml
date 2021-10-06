@@ -134,7 +134,7 @@ jobs:
             xrsec/php:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-  Repository Dispatch:
+  Repository_Dispatch:
     needs: Build_For_PHP56_74
     runs-on: ubuntu-latest
     steps:
