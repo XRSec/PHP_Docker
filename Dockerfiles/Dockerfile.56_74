@@ -6,14 +6,14 @@ RUN mkdir -p /www /www/server /www/bak /www/server/php74 /www/server/php56
 COPY --from=xrsec/php:7.4 /www/server/php74 /www/server/php74
 COPY --from=xrsec/php:5.6 /www/server/php56 /www/server/php56
 
-RUN ln -s /www/server/php74/bin/php /usr/bin/php74 \
-    && ln -s /www/server/php74/sbin/php-fpm /usr/bin/php74-fpm \
-    && ln -s /www/server/php74/bin/pecl /usr/bin/php74-pecl \
-    && ln -s /www/server/php74/bin/pear /usr/bin/php74-pear \
-    && ln -s /www/server/php56/sbin/php-fpm /usr/bin/php56-fpm \
-    && ln -s /www/server/php56/bin/php /usr/bin/php56 \
-    && ln -s /www/server/php56/bin/pecl /usr/bin/php56-pecl \
-    && ln -s /www/server/php56/bin/pear /usr/bin/php56-pear
+RUN ln -sf /www/server/php74/bin/php /usr/bin/php74 \
+    && ln -sf /www/server/php74/sbin/php-fpm /usr/bin/php74-fpm \
+    && ln -sf /www/server/php74/bin/pecl /usr/bin/php74-pecl \
+    && ln -sf /www/server/php74/bin/pear /usr/bin/php74-pear \
+    && ln -sf /www/server/php56/sbin/php-fpm /usr/bin/php56-fpm \
+    && ln -sf /www/server/php56/bin/php /usr/bin/php56 \
+    && ln -sf /www/server/php56/bin/pecl /usr/bin/php56-pecl \
+    && ln -sf /www/server/php56/bin/pear /usr/bin/php56-pear
 
 ENTRYPOINT ["/bin/bash"]
 
