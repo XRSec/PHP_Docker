@@ -34,7 +34,7 @@ jobs:
           tags: |
             xrsec/php:init
           cache-from: type=registry,ref=xrsec/php:init
-          cache-to: type=inline
+          cache-to: type=registry,ref=xrsec/php:init,mode=max
 
   Build_For_PHP56:
     needs: Build_For_PHP_INIT
@@ -67,7 +67,7 @@ jobs:
           tags: |
             xrsec/php:5.6
           cache-from: type=registry,ref=xrsec/php:5.6
-          cache-to: type=inline
+          cache-to: type=registry,ref=xrsec/php:5.6,mode=max
 
   Build_For_PHP74:
     needs: Build_For_PHP_INIT
@@ -100,7 +100,7 @@ jobs:
           tags: |
             xrsec/php:7.4
           cache-from: type=registry,ref=xrsec/php:7.4
-          cache-to: type=inline
+          cache-to: type=registry,ref=xrsec/php:7.4,mode=max
 
   Build_For_PHP56_74:
     needs: [Build_For_PHP56, Build_For_PHP74]
@@ -133,7 +133,7 @@ jobs:
           tags: |
             xrsec/php:latest
           cache-from: type=registry,ref=xrsec/php:latest
-          cache-to: type=inline
+          cache-to: type=registry,ref=xrsec/php:latest,mode=max
 
   Repository_Dispatch:
     needs: Build_For_PHP56_74
