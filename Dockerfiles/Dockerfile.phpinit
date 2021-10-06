@@ -1,0 +1,31 @@
+FROM centos:latest
+LABEL maintainer="xrsec"
+LABEL mail="troy@zygd.site"
+
+RUN yum update -y \
+    && yum install -y nodejs wget zsh vim make cmake gcc gcc-c++ libxml2 libxml2-devel git \
+    zip unzip sqlite-devel m4 autoconf tree ncurses \
+    krb5-devel openssl openssl-devel curl curl-devel libjpeg \
+    libjpeg-devel libpng libpng-devel freetype freetype-devel \
+    pcre pcre-devel libxslt libxslt-devel bzip2 bzip2-devel \
+    openssh-server iputils net-tools oniguruma sudo go nss -y \
+    && yum upgrade \
+    && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+RUN wget -O /www/bak/oniguruma.tar.gz https://github.com/kkos/oniguruma/releases/download/v6.9.7.1/onig-6.9.7.1.tar.gz --no-cookie --no-check-certificate \
+    && tar -zxvf /www/bak/oniguruma.tar.gz -C /www/bak \
+    && rm -rf /www/bak/oniguruma.tar.gz
+
+RUN cd /www/bak/onig-6.9.7 \
+    && ./configure --prefix=/usr \
+    && make && make install \
+    && rm -rf /www/bak/onig-6.9.7
+
+ENTRYPOINT ["/bin/bash"]
+
+# ENV TZ='Asia/Shanghai'
+# ENV LANG 'zh_CN.UTF-8'
+
+STOPSIGNAL SIGQUIT
+
+CMD ["/bin/bash"]
