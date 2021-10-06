@@ -37,6 +37,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   Build_For_PHP56:
+    needs: Build_For_PHP_INIT
     name: Docker Build PHP56
     runs-on: ubuntu-latest
     steps:
@@ -69,6 +70,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   Build_For_PHP74:
+    needs: Build_For_PHP_INIT
     name: Docker Build PHP74
     runs-on: ubuntu-latest
     steps:
@@ -101,6 +103,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   Build_For_PHP56_74:
+    needs: [Build_For_PHP56, Build_For_PHP74]
     name: Docker Build PHP56_74
     runs-on: ubuntu-latest
     steps:
@@ -131,3 +134,14 @@ jobs:
             xrsec/php:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+  Repository Dispatch:
+    needs: Build_For_PHP56_74
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v1
+        with:
+          token: ${{ secrets.TOKEN_GITHUB }}
+          repository: XRSec/Code-Server-Update
+          event-type: PhpUpdate
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
