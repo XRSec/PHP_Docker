@@ -33,8 +33,8 @@ jobs:
           push: true
           tags: |
             xrsec/php:init
-          cache-from: type=registry,ref=xrsec/php:init
-          cache-to: type=registry,ref=xrsec/php:init,mode=max
+          cache-from: type=registry,ref=xrsec/php:init.cache
+          cache-to: type=registry,ref=xrsec/php:init.cache,mode=max
 
   Build_For_PHP56:
     needs: Build_For_PHP_INIT
@@ -66,8 +66,8 @@ jobs:
           push: true
           tags: |
             xrsec/php:5.6
-          cache-from: type=registry,ref=xrsec/php:5.6
-          cache-to: type=registry,ref=xrsec/php:5.6,mode=max
+          cache-from: type=registry,ref=xrsec/php:5.6.cache
+          cache-to: type=registry,ref=xrsec/php:5.6.cache,mode=max
 
   Build_For_PHP74:
     needs: Build_For_PHP_INIT
@@ -99,8 +99,8 @@ jobs:
           push: true
           tags: |
             xrsec/php:7.4
-          cache-from: type=registry,ref=xrsec/php:7.4
-          cache-to: type=registry,ref=xrsec/php:7.4,mode=max
+          cache-from: type=registry,ref=xrsec/php:7.4.cache
+          cache-to: type=registry,ref=xrsec/php:7.4.cache,mode=max
 
   Build_For_PHP56_74:
     needs: [Build_For_PHP56, Build_For_PHP74]
@@ -132,8 +132,8 @@ jobs:
           push: true
           tags: |
             xrsec/php:latest
-          cache-from: type=registry,ref=xrsec/php:latest
-          cache-to: type=registry,ref=xrsec/php:latest,mode=max
+          cache-from: type=registry,ref=xrsec/php:latest.cache
+          cache-to: type=registry,ref=xrsec/php:latest.cache,mode=max
 
   Repository_Dispatch:
     needs: Build_For_PHP56_74
