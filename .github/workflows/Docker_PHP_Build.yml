@@ -1,7 +1,8 @@
 name: Docker PHP Build
   
 on:
-  push
+  watch:
+    types: [started]
 
 jobs:
   Build_For_PHP_INIT:
@@ -147,3 +148,10 @@ jobs:
           repository: XRSec/Code-Server-Update
           event-type: PhpUpdate
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
+      - 
+        name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: xrsec/php
