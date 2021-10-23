@@ -33,9 +33,9 @@ jobs:
           file: Dockerfiles/Dockerfile.init
           push: true
           tags: |
-            xrsec/php:init
-          cache-from: type=registry,ref=xrsec/php:init.cache
-          cache-to: type=registry,ref=xrsec/php:init.cache,mode=max
+            ${{ secrets.DOCKERHUB_USERNAME }}/php:init
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:init.cache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:init.cache,mode=max
 
   Build_For_PHP56:
     needs: Build_For_PHP_INIT
@@ -66,9 +66,9 @@ jobs:
           file: Dockerfiles/Dockerfile.56
           push: true
           tags: |
-            xrsec/php:5.6
-          cache-from: type=registry,ref=xrsec/php:5.6.cache
-          cache-to: type=registry,ref=xrsec/php:5.6.cache,mode=max
+            ${{ secrets.DOCKERHUB_USERNAME }}/php:5.6
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:5.6.cache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:5.6.cache,mode=max
 
   Build_For_PHP74:
     needs: Build_For_PHP_INIT
@@ -99,9 +99,9 @@ jobs:
           file: Dockerfiles/Dockerfile.74
           push: true
           tags: |
-            xrsec/php:7.4
-          cache-from: type=registry,ref=xrsec/php:7.4.cache
-          cache-to: type=registry,ref=xrsec/php:7.4.cache,mode=max
+            ${{ secrets.DOCKERHUB_USERNAME }}/php:7.4
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:7.4.cache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:7.4.cache,mode=max
 
   Build_For_PHP56_74:
     needs: [Build_For_PHP56, Build_For_PHP74]
@@ -132,9 +132,9 @@ jobs:
           file: Dockerfiles/Dockerfile.56_74
           push: true
           tags: |
-            xrsec/php:latest
-          cache-from: type=registry,ref=xrsec/php:latest.cache
-          cache-to: type=registry,ref=xrsec/php:latest.cache,mode=max
+            ${{ secrets.DOCKERHUB_USERNAME }}/php:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:latest.cache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:latest.cache,mode=max
 
   Repository_Dispatch:
     needs: Build_For_PHP56_74
@@ -145,7 +145,7 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
-          repository: XRSec/Code-Server-Update
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/Code-Server-Update
           event-type: PhpUpdate
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
       - 
@@ -154,4 +154,4 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: xrsec/php
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/php
