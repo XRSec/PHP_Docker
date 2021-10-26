@@ -39,7 +39,7 @@ RUN yum install epel-release -y \
     && yum install -y gcc gcc-c++ kernel-devel \
     && mkdir -p /var/log/supervisor \
     && tar -zxvf /tmp/1.3.0.tar.gz -C ${PREFIX_DIR} \
-    && cd guacamole-server-${GUACD_VERSION} \
+    && cd ${PREFIX_DIR}/guacamole-server-${GUACD_VERSION} \
     && ./configure --prefix="$PREFIX_DIR" --disable-guaclog \
     && make && make install && ldconfig \
     && rm -rf ${PREFIX_DIR}/guacamole-server-${GUACD_VERSION}.tar.gz ${PREFIX_DIR}/guacamole-server-${GUACD_VERSION} \
