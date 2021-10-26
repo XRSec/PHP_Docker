@@ -29,7 +29,7 @@ jobs:
         with:
           context: .
           platforms: linux/arm64,linux/amd64
-          file: Dockerfiles/Dockerfile.next-terminal
+          file: Dockerfiles/dockerfile.next-terminal
           push: true
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/next-terminal:latest
