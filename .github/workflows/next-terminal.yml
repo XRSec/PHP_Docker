@@ -28,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v2.7.0
         with:
           context: .
-          platforms: linux/arm64,linux/amd64
+          platforms: linux/arm64
           file: Dockerfiles/dockerfile.next-terminal
           push: true
           tags: |
