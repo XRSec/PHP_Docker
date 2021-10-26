@@ -1,12 +1,11 @@
-  name: Docker PHP Build
+name: Docker next-terminal Build
   
 on:
   push
 
 jobs:
   next_terminal:
-    needs: Build_For_PHP_INIT
-    name: Docker Build PHP56
+    name: Docker next-terminal Build
     runs-on: ubuntu-latest
     steps:
       - 
