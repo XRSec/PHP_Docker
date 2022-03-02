@@ -23,8 +23,15 @@ jobs:
         name: Docker Login
         uses: docker/login-action@v1.10.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: xrsec
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Log in to the Container registry
+        uses: docker/login-action@v1.10.0
+        with:
+          registry: ghcr.io
+          username: xrsec
+          password: ${{ secrets.TOKEN_GITHUB }}
       - 
         name: Build and push Docker images
         uses: docker/build-push-action@v2.7.0
@@ -34,9 +41,10 @@ jobs:
           file: Dockerfiles/Dockerfile.init
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/php:init
-          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:init.cache
-          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:init.cache,mode=max
+            xrsec/php:init
+            ghcr.io/xrsec/php:init
+          cache-from: type=registry,ref=xrsec/php:init.cache
+          cache-to: type=registry,ref=xrsec/php:init.cache,mode=max
 
   Build_For_PHP56:
     needs: Build_For_PHP_INIT
@@ -56,8 +64,15 @@ jobs:
         name: Docker Login
         uses: docker/login-action@v1.10.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: xrsec
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Log in to the Container registry
+        uses: docker/login-action@v1.10.0
+        with:
+          registry: ghcr.io
+          username: xrsec
+          password: ${{ secrets.TOKEN_GITHUB }}
       - 
         name: Build and push Docker images
         uses: docker/build-push-action@v2.7.0
@@ -67,9 +82,10 @@ jobs:
           file: Dockerfiles/Dockerfile.56
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/php:5.6
-          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:5.6.cache
-          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:5.6.cache,mode=max
+            xrsec/php:5.6
+            ghcr.io/xrsec/php:5.6
+          cache-from: type=registry,ref=xrsec/php:5.6.cache
+          cache-to: type=registry,ref=xrsec/php:5.6.cache,mode=max
 
   Build_For_PHP74:
     needs: Build_For_PHP_INIT
@@ -89,8 +105,15 @@ jobs:
         name: Docker Login
         uses: docker/login-action@v1.10.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: xrsec
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Log in to the Container registry
+        uses: docker/login-action@v1.10.0
+        with:
+          registry: ghcr.io
+          username: xrsec
+          password: ${{ secrets.TOKEN_GITHUB }}
       - 
         name: Build and push Docker images
         uses: docker/build-push-action@v2.7.0
@@ -100,9 +123,10 @@ jobs:
           file: Dockerfiles/Dockerfile.74
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/php:7.4
-          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:7.4.cache
-          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:7.4.cache,mode=max
+            xrsec/php:7.4
+            ghcr.io/xrsec/php:7.4
+          cache-from: type=registry,ref=xrsec/php:7.4.cache
+          cache-to: type=registry,ref=xrsec/php:7.4.cache,mode=max
 
   Build_For_PHP56_74:
     needs: [Build_For_PHP56, Build_For_PHP74]
@@ -122,8 +146,15 @@ jobs:
         name: Docker Login
         uses: docker/login-action@v1.10.0
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: xrsec
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - 
+        name: Log in to the Container registry
+        uses: docker/login-action@v1.10.0
+        with:
+          registry: ghcr.io
+          username: xrsec
+          password: ${{ secrets.TOKEN_GITHUB }}
       - 
         name: Build and push Docker images
         uses: docker/build-push-action@v2.7.0
@@ -133,9 +164,10 @@ jobs:
           file: Dockerfiles/Dockerfile.56_74
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/php:latest
-          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:latest.cache
-          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/php:latest.cache,mode=max
+            xrsec/php:latest
+            ghcr.io/xrsec/php:latest
+          cache-from: type=registry,ref=xrsec/php:latest.cache
+          cache-to: type=registry,ref=xrsec/php:latest.cache,mode=max
 
   Repository_Dispatch:
     needs: Build_For_PHP56_74
@@ -149,13 +181,13 @@ jobs:
         uses: peter-evans/repository-dispatch@v1
         with:
           token: ${{ secrets.TOKEN_GITHUB }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/Code-Server-Update
+          repository: xrsec/Code-Server-Update
           event-type: Php_Update_Action
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
       - 
         name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: xrsec
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/php
+          repository: xrsec/php
