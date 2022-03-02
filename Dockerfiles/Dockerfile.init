@@ -2,7 +2,11 @@ FROM centos:latest
 LABEL maintainer="xrsec"
 LABEL mail="troy@zygd.site"
 
-RUN mkdir -p /www /www/server /www/bak /www/server/php74 /www/server/php56
+RUN mkdir -p /www /www/server /www/bak /www/server/php74 /www/server/php56 \
+    && sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* \
+    && sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS -* \
+    && yum clean all && yum makecache && yum update -y && yum upgrade -y
+
 
 RUN yum update -y \
     && yum install -y nodejs wget zsh vim make cmake gcc gcc-c++ libxml2 libxml2-devel git \
