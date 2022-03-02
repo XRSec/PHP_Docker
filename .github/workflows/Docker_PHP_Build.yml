@@ -3,6 +3,7 @@ name: Docker PHP Build
 on:
   watch:
     types: [started]
+  workflow_dispatch:
 
 jobs:
   Build_For_PHP_INIT:
