@@ -1,6 +1,9 @@
 FROM xrsec/php:init
 LABEL maintainer="xrsec"
 LABEL mail="troy@zygd.site"
+LABEL Github="https://github.com/XRSec/PHP_Docker"
+LABEL org.opencontainers.image.source="https://github.com/XRSec/PHP_Docker"
+LABEL org.opencontainers.image.title="PHP_Docker"
 
 RUN mkdir -p /www /www/server /www/bak /www/server/php56
 
