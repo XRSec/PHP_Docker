@@ -1,6 +1,6 @@
 FROM xrsec/osinit:centos
 LABEL maintainer="xrsec"
-LABEL mail="troy@zygd.site"
+LABEL mail="Jalapeno1868@outlook.com"
 LABEL Github="https://github.com/XRSec/PHP_Docker"
 LABEL org.opencontainers.image.source="https://github.com/XRSec/PHP_Docker"
 LABEL org.opencontainers.image.title="PHP_Docker"

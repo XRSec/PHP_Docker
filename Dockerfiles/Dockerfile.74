@@ -1,6 +1,6 @@
 FROM xrsec/php:init
 LABEL maintainer="xrsec"
-LABEL mail="troy@zygd.site"
+LABEL mail="Jalapeno1868@outlook.com"
 LABEL Github="https://github.com/XRSec/PHP_Docker"
 LABEL org.opencontainers.image.source="https://github.com/XRSec/PHP_Docker"
 LABEL org.opencontainers.image.title="PHP_Docker"
@@ -19,7 +19,7 @@ RUN cd /www/bak/php-7.4.16 \
     --enable-fpm --enable-bcmath --enable-inline-optimization \
     --enable-mbregex --enable-mbstring --enable-opcache --enable-pcntl --enable-shmop --enable-soap \
     --enable-sockets --enable-sysvsem --enable-sysvshm --enable-xml
-    
+
 RUN cd /www/bak/php-7.4.16 \
     && make && make install \
     && /www/bak/php-7.4.16/build/shtool install -c ext/phar/phar.phar /www/server/php74/bin/phar.phar \
